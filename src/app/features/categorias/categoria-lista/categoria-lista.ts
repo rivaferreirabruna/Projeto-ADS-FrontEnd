@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { CategoriaForm } from '../categoria-form/categoria-form';
 import { Categoria } from '../../../models/categoria.model';
 import { CategoriaService } from '../../../core/services/categoria.service';
@@ -9,12 +9,35 @@ import { CategoriaService } from '../../../core/services/categoria.service';
   styleUrl: './categoria-lista.css',
   templateUrl: './categoria-lista.html',
 })
-export class CategoriaLista {
-  categorias:Categoria[];
+export class CategoriaLista implements OnInit{
+  categorias!:Categoria[];
+  categoriaSelecionada: Categoria | null = null;
   constructor(private categoriaService: CategoriaService){
 
   }
   ngOnInit(): void{
+    this.carregarCategorias();
+  }
+  carregarCategorias(){
     this.categorias = this.categoriaService.listar();
+  }
+  editar(categoria: Categoria):void{
+    this.categoriaSelecionada = {...categoria}
+  }
+  aoSalvar():void{
+    this.categoriaSelecionada = null;
+    this.carregarCategorias();
+  }
+
+  aoCancelar():void{
+    this.categoriaSelecionada = null;
+  }
+
+  alterarSituacao(id: number):void{
+    this.categoriaService.alterarSituacao(id);
+    if(this.categoriaSelecionada?.id === id){
+      this.categoriaSelecionada = null;
+    }
+    this.carregarCategorias();
   }
 }
