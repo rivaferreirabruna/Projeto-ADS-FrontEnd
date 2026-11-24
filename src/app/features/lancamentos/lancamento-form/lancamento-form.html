@@ -1,0 +1,46 @@
+<form [formGroup]="formulario" (ngSubmit)="salvar()" class="row g-2 mb-4">
+  @if (lancamento()) {
+    <div class="col-12">
+      <h3 class="h5">Editando lançamento</h3>
+    </div>
+  }
+  <div class="col-md-6">
+    <label class="form-label" for="descricaoLancamento">Descrição</label>
+    <input id="descricaoLancamento" class="form-control" formControlName="descricao" title="Descrição do lançamento">
+    @if (formulario.controls.descricao.touched && formulario.controls.descricao.invalid) {
+      <small class="text-danger">Informe de 3 a 200 caracteres.</small>
+    }
+  </div>
+  <div class="col-md-3">
+    <label class="form-label" for="valorLancamento">Valor</label>
+    <input id="valorLancamento" class="form-control" type="number" step="0.01" min="0.01" formControlName="valor" title="Valor do lançamento">
+  </div>
+  <div class="col-md-3">
+    <label class="form-label" for="dataLancamento">Data</label>
+    <input id="dataLancamento" class="form-control" type="date" formControlName="dataLancamento" title="Data do lançamento">
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="categoriaLancamento">Categoria</label>
+    <select id="categoriaLancamento" class="form-select" formControlName="categoriaId" title="Categoria do lançamento">
+      <option [ngValue]="null">Selecione</option>
+      @for (c of categoriasDisponiveis(); track c.id) {
+        <option [ngValue]="c.id">{{ c.descricao }} ({{ c.tipo }}{{ c.ativa ? '' : ' - histórica' }})</option>
+      }
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label" for="observacaoLancamento">Observação</label>
+    <input id="observacaoLancamento" class="form-control" formControlName="observacao" title="Observação do lançamento">
+  </div>
+  <div class="col-12">
+    <button class="btn btn-primary" type="submit" [disabled]="salvando()">
+      {{ salvando() ? 'Salvando...' : (lancamento() ? 'Salvar alterações' : 'Cadastrar lançamento') }}
+    </button>
+    @if (lancamento()) {
+      <button class="btn btn-outline-secondary ms-2" type="button" (click)="cancelar()" [disabled]="salvando()">
+        Cancelar
+      </button>
+    }
+  </div>
+  @if (erro()) { <div class="alert alert-danger mt-2 mb-0">{{ erro() }}</div> }
+</form>
