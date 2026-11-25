@@ -1,0 +1,153 @@
+<div class="login-page">
+
+  <div class="login-card">
+
+    <!-- Painel de apresentação -->
+    <section class="login-brand">
+
+      <span class="brand-label">
+        CONTROLE FINANCEIRO
+      </span>
+
+      <div class="brand-illustration">
+        <svg viewBox="0 0 300 160" aria-hidden="true">
+          <g stroke="#ffffff25" stroke-dasharray="5 5">
+            <path d="M10 140 H290"/>
+            <path d="M10 100 H290"/>
+            <path d="M10 60 H290"/>
+            <path d="M10 20 H290"/>
+          </g>
+
+          <rect x="25" y="95" width="35" height="45"
+                rx="5" fill="#ffffff30"/>
+
+          <rect x="80" y="70" width="35" height="70"
+                rx="5" fill="#ffffff50"/>
+
+          <rect x="135" y="85" width="35" height="55"
+                rx="5" fill="#ffffff70"/>
+
+          <rect x="190" y="40" width="35" height="100"
+                rx="5" fill="#2dd4bf90"/>
+
+          <rect x="245" y="15" width="35" height="125"
+                rx="5" fill="#2dd4bf"/>
+
+          <polyline
+            points="42,80 97,55 152,70 207,25 262,5"
+            fill="none"
+            stroke="#99f6e4"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <h1>Sua vida financeira sob controle.</h1>
+
+      <p>
+        Organize suas receitas, acompanhe suas despesas
+        e planeje seu futuro com mais tranquilidade.
+      </p>
+
+      <div class="brand-footer">
+        Planejamento. Organização. Equilíbrio.
+      </div>
+
+    </section>
+
+    <!-- Painel de autenticação -->
+    <section class="login-content">
+
+      <div class="login-header">
+        <h2>Bem-vindo!</h2>
+        <p>Acesse sua conta para continuar.</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="entrar()">
+
+        <div class="mb-4">
+          <label for="email" class="form-label">
+            E-mail
+          </label>
+
+          <input
+            id="email"
+            type="email"
+            class="form-control"
+            formControlName="email"
+            placeholder="seuemail@exemplo.com"
+            autocomplete="username"
+            [class.is-invalid]="
+              form.controls.email.invalid &&
+              form.controls.email.touched
+            ">
+
+          @if (form.controls.email.invalid &&
+               form.controls.email.touched) {
+            <div class="invalid-feedback">
+              Informe um e-mail válido.
+            </div>
+          }
+        </div>
+
+        <div class="mb-4">
+          <label for="senha" class="form-label">
+            Senha
+          </label>
+
+          <input
+            id="senha"
+            type="password"
+            class="form-control"
+            formControlName="senha"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+            [class.is-invalid]="
+              form.controls.senha.invalid &&
+              form.controls.senha.touched
+            ">
+
+          @if (form.controls.senha.invalid &&
+               form.controls.senha.touched) {
+            <div class="invalid-feedback">
+              Informe sua senha.
+            </div>
+          }
+        </div>
+
+        @if (erro()) {
+          <div class="alert alert-danger" role="alert">
+            {{ erro() }}
+          </div>
+        }
+
+        <button
+          class="btn btn-login w-100"
+          type="submit"
+          [disabled]="form.invalid || enviando()">
+
+          @if (enviando()) {
+            <span
+              class="spinner-border spinner-border-sm me-2"
+              aria-hidden="true">
+            </span>
+            Entrando...
+          } @else {
+            Entrar na minha conta &rarr;
+          }
+
+        </button>
+
+      </form>
+
+      <div class="login-footer">
+        Controle Financeiro Doméstico
+        <span>Organize hoje. Conquiste amanhã.</span>
+      </div>
+
+    </section>
+
+  </div>
+
+</div>

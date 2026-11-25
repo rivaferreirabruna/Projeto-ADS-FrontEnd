@@ -35,13 +35,15 @@ export class LancamentoLista implements OnInit {
   carregar(): void {
     this.carregando.set(true);
     this.erro.set('');
-    this.lancamentoService.listar(this.usuarioId).subscribe({
+    this.lancamentoService.listar().subscribe({
       next: dados => {
         this.lancamentos.set(dados);
         this.carregando.set(false);
       },
       error: err => {
-        this.erro.set('Não foi possível carregar os lançamentos.');
+        this.erro.set(err.status === 403
+          ? 'Acesso negado: você não tem permissão para visualizar lançamentos.'
+          : 'Não foi possível carregar os lançamentos.');
         this.carregando.set(false);
         console.error(err);
       }

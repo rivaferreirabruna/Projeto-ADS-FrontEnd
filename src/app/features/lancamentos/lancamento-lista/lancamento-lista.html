@@ -1,9 +1,7 @@
 <app-lancamento-form
-  [usuarioId]="usuarioId"
   [lancamento]="lancamentoSelecionado()"
   (salvou)="aoSalvar()"
   (cancelou)="aoCancelar()" />
-
 <h2>Lançamentos financeiros</h2>
 @if (carregando()) { <p>Carregando...</p> }
 @if (erro()) { <div class="alert alert-danger">{{ erro() }}</div> }

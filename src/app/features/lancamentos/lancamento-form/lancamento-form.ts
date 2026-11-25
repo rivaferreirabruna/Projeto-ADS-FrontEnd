@@ -11,7 +11,6 @@ import { LancamentoRequest, LancamentoResponse } from '../../../models/lancament
   templateUrl: './lancamento-form.html'
 })
 export class LancamentoForm implements OnInit {
-  usuarioId = input.required<number>();
   lancamento = input<LancamentoResponse | null>(null);
   salvou = output<void>();
   cancelou = output<void>();
@@ -63,7 +62,11 @@ export class LancamentoForm implements OnInit {
   ngOnInit(): void {
     this.categoriasService.listar().subscribe({
       next: dados => this.categorias.set(dados),
-      error: () => this.erro.set('Falha ao carregar categorias.')
+      error: err => this.erro.set(
+        err.status === 403
+          ? 'Acesso negado: você não tem permissão para usar este recurso.'
+          : 'Falha ao carregar categorias.'
+      )
     });
   }
 
@@ -89,8 +92,8 @@ export class LancamentoForm implements OnInit {
     this.erro.set('');
     const lancamento = this.lancamento();
     const requisicao = lancamento
-      ? this.lancamentosService.atualizar(this.usuarioId(), lancamento.id, dados)
-      : this.lancamentosService.cadastrar(this.usuarioId(), dados);
+      ? this.lancamentosService.atualizar(lancamento.id, dados)
+      : this.lancamentosService.cadastrar(dados);
 
     requisicao.subscribe({
       next: () => {
@@ -103,6 +106,8 @@ export class LancamentoForm implements OnInit {
 
         if (err.status === 400) {
           this.erro.set(err.error?.erro || 'Dados inválidos. Revise os campos do lançamento.');
+        } else if (err.status === 403) {
+          this.erro.set('Acesso negado: você não tem permissão para realizar esta operação.');
         } else if (err.status === 404) {
           this.erro.set('Usuário, lançamento ou categoria não encontrado.');
         } else if (err.status === 415) {
